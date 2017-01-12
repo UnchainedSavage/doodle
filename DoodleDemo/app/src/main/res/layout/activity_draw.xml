@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+    <RelativeLayout
+        android:id="@+id/draw_navigation"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="100px"
+        android:background="#0B1724">
+
+        <!-- 取消按钮 -->
+        <FrameLayout
+            android:id="@+id/doodle_cancel_btn"
+            android:layout_marginLeft="48px"
+            android:layout_centerVertical="true"
+            android:layout_width="40px"
+            android:layout_height="40px">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/doodle_cancel_btn_bg"/>
+        </FrameLayout>
+
+        <!-- 上一步按钮 -->
+        <FrameLayout
+            android:id="@+id/doodle_prev_btn"
+            android:layout_marginLeft="435px"
+            android:layout_centerVertical="true"
+            android:layout_width="41px"
+            android:layout_height="44px">
+            <ImageView
+                android:id="@+id/doodle_prev_btn_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/doodle_prev_btn_bg"/>
+        </FrameLayout>
+
+        <!-- 下一步按钮 -->
+        <FrameLayout
+            android:id="@+id/doodle_next_btn"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="435px"
+            android:layout_centerVertical="true"
+            android:layout_width="41px"
+            android:layout_height="44px">
+            <ImageView
+                android:id="@+id/doodle_next_btn_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/doodle_next_btn_bg"/>
+        </FrameLayout>
+
+        <!-- 确认按钮 -->
+        <FrameLayout
+            android:id="@+id/doodle_confirm_btn"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="48px"
+            android:layout_centerVertical="true"
+            android:layout_width="51px"
+            android:layout_height="35px">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/doodle_confirm_btn_bg"/>
+        </FrameLayout>
+
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/draw_toolbar"
+        android:layout_width="match_parent"
+        android:background="#DFDFDF"
+        android:layout_height="200px">
+
+        <!-- 第一排颜色选择 -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginLeft="70px"
+            android:layout_marginTop="40px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/color_red_btn"
+                android:layout_width="70px"
+                android:layout_height="70px"
+                android:src="@drawable/color_red_normal"
+                android:scaleType="fitXY"/>
+            <ImageView
+                android:id="@+id/color_yellow_btn"
+                android:layout_marginLeft="15px"
+                android:layout_width="70px"
+                android:layout_height="70px"
+                android:src="@drawable/color_yellow_normal"
+                android:scaleType="fitXY"/>
+            <ImageView
+                android:id="@+id/color_purple_btn"
+                android:layout_marginLeft="15px"
+                android:layout_width="70px"
+                android:layout_height="70px"
+                android:src="@drawable/color_purple_normal"
+                android:scaleType="fitXY"/>
+        </LinearLayout>
+
+        <!-- 第二排排颜色选择 -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginLeft="70px"
+            android:layout_marginTop="115px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/color_black_btn"
+                android:layout_width="70px"
+                android:layout_height="70px"
+                android:src="@drawable/color_black_normal"
+                android:scaleType="fitXY"/>
+            <ImageView
+                android:id="@+id/color_green_btn"
+                android:layout_marginLeft="15px"
+                android:layout_width="70px"
+                android:layout_height="70px"
+                android:src="@drawable/color_green_normal"
+                android:scaleType="fitXY"/>
+            <ImageView
+                android:id="@+id/color_blue_btn"
+                android:layout_marginLeft="15px"
+                android:layout_width="70px"
+                android:layout_height="70px"
+                android:src="@drawable/color_blue_normal"
+                android:scaleType="fitXY"/>
+        </LinearLayout>
+
+        <!-- 小画笔选择 -->
+        <ImageView
+            android:layout_marginLeft="335px"
+            android:id="@+id/drawpen_small_image"
+            android:layout_centerVertical="true"
+            android:layout_width="69px"
+            android:layout_height="60px"
+            android:scaleType="fitXY"/>
+
+        <!-- 中画笔选择 -->
+        <ImageView
+            android:layout_marginLeft="13px"
+            android:layout_toRightOf="@id/drawpen_small_image"
+            android:id="@+id/drawpen_middle_image"
+            android:layout_centerVertical="true"
+            android:layout_width="86px"
+            android:layout_height="76px"
+            android:scaleType="fitXY"/>
+
+        <!-- 大画笔选择 -->
+        <ImageView
+            android:layout_marginLeft="13px"
+            android:layout_toRightOf="@id/drawpen_middle_image"
+            android:id="@+id/drawpen_large_image"
+            android:layout_centerVertical="true"
+            android:layout_width="100px"
+            android:layout_height="88px"
+            android:scaleType="fitXY"/>
+
+        <!-- 小橡皮擦选择 -->
+        <ImageView
+            android:layout_marginLeft="55px"
+            android:layout_toRightOf="@id/drawpen_large_image"
+            android:id="@+id/draweraser_small_image"
+            android:layout_centerVertical="true"
+            android:layout_width="68px"
+            android:layout_height="68px"
+            android:scaleType="fitXY"/>
+
+        <!-- 大橡皮擦选择 -->
+        <ImageView
+            android:layout_marginLeft="38px"
+            android:layout_toRightOf="@id/draweraser_small_image"
+            android:id="@+id/draweraser_large_image"
+            android:layout_centerVertical="true"
+            android:layout_width="88px"
+            android:layout_height="88px"
+            android:scaleType="fitXY"/>
+
+    </RelativeLayout>
+
+    <com.midea.fridge.fridgedoodle.widget.DrawPenView
+        android:id="@+id/draw_pen_view"
+        android:background="@android:color/white"
+        android:layout_above="@id/draw_navigation"
+        android:layout_below="@id/draw_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>

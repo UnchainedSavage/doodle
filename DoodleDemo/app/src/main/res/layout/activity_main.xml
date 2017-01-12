@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.midea.fridge.fridgedoodle.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/navigation"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="100px"
+        android:background="#0B1724">
+
+        <LinearLayout
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@drawable/activity_back_color_bg"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="26px"
+                android:layout_height="46px"
+                android:layout_marginLeft="41px"
+                android:background="@drawable/icon_jiantou" />
+
+            <TextView
+                android:id="@+id/navigation_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24px"
+                android:layout_marginRight="30px"
+                android:text="首页"
+                android:textColor="#FFFFFF"
+                android:textSize="40px" />
+
+        </LinearLayout>
+
+        <!-- 一组编辑按钮 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="47px"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/doodle_add_btn"
+                android:layout_width="60px"
+                android:layout_height="60px"
+                android:background="@drawable/doodle_add_btn_bg" />
+
+            <ImageView
+                android:id="@+id/doodle_edit_btn"
+                android:layout_marginLeft="35px"
+                android:layout_width="60px"
+                android:layout_height="60px"
+                android:background="@drawable/doodle_edit_btn_bg" />
+
+            <ImageView
+                android:id="@+id/doodle_delete_btn"
+                android:layout_marginLeft="35px"
+                android:layout_width="60px"
+                android:layout_height="60px"
+                android:background="@drawable/doodle_delete_btn_bg" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!-- 涂鸦列表-->
+    <RelativeLayout
+        android:id="@+id/doodle_preview_list_wrapper"
+        android:layout_above="@id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="510px"
+        android:background="#DFDFDF">
+        <android.support.v7.widget.RecyclerView
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="15px"
+            android:layout_width="match_parent"
+            android:layout_height="427px"
+            android:id="@+id/doodle_preview_list"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_above="@id/doodle_preview_list_wrapper"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/doodle_select_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/doodle_empty_view"
+        android:layout_above="@id/navigation"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/doodle_add_big_btn"
+            android:src="@drawable/doodle_empty_add_btn"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="568px"
+            android:layout_width="250px"
+            android:layout_height="320px"
+            android:scaleType="fitXY"/>
+        <TextView
+            android:layout_below="@id/doodle_add_big_btn"
+            android:layout_marginTop="69px"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="亲，还没有作品哦！"
+            android:textSize="50px"
+            android:textColor="#676B6C"/>
+    </RelativeLayout>
+
+</RelativeLayout>

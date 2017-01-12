@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="279px"
+    android:layout_height="match_parent">
+
+    <!-- 选中时的预览图 -->
+    <RelativeLayout
+        android:id="@+id/preview_selected"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/preview_selected_image"
+            android:layout_width="match_parent"
+            android:layout_height="357px"
+            android:padding="2px"
+            android:background="@drawable/doodle_select_bg"
+            android:scaleType="fitXY"/>
+        <TextView
+            android:id="@+id/preview_selected_text"
+            android:layout_marginBottom="15px"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:textSize="28px"
+            android:textColor="#EB9900"/>
+    </RelativeLayout>
+
+    <!-- 未选中时的预览图 -->
+    <RelativeLayout
+        android:id="@+id/preview_unselected"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/preview_unselected_image"
+            android:layout_marginTop="15px"
+            android:layout_centerHorizontal="true"
+            android:layout_width="250px"
+            android:layout_height="320px"
+            android:scaleType="fitXY"/>
+        <TextView
+            android:id="@+id/preview_unselected_text"
+            android:layout_marginBottom="15px"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:textSize="28px"
+            android:textColor="#676B6C"/>
+    </RelativeLayout>
+
+</RelativeLayout>

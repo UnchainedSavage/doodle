@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="100px"
+    android:background="#0B1724">
+
+    <LinearLayout
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:background="@drawable/activity_back_color_bg"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="26px"
+            android:layout_height="46px"
+            android:layout_marginLeft="41px"
+            android:background="@drawable/icon_jiantou" />
+
+        <TextView
+            android:id="@+id/navigation_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24px"
+            android:layout_marginRight="30px"
+            android:text="首页"
+            android:textColor="#FFFFFF"
+            android:textSize="40px" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/btn_home"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="52px"
+            android:layout_height="50px"
+            android:layout_marginLeft="15px"
+            android:layout_marginRight="44px"
+            android:background="@drawable/navigation_home" />
+
+    </LinearLayout>
+
+</RelativeLayout>
