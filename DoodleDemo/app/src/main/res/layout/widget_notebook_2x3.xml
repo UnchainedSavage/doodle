@@ -9,35 +9,36 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:background="@drawable/desktopwidget_notebook_top_bg"
-        android:layout_height="100px">
+        android:layout_height="53px">
         
         <LinearLayout
-            android:layout_centerInParent="true"
             android:orientation="horizontal"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center">
-            <ImageView
-                android:layout_width="80px"
-                android:layout_height="80px"
-                android:scaleType="fitXY"
-                android:src="@drawable/desktopwidget_doodle_icon"/>
+            <!--<ImageView-->
+                <!--android:layout_width="80px"-->
+                <!--android:layout_height="80px"-->
+                <!--android:scaleType="fitXY"-->
+                <!--android:src="@drawable/desktopwidget_doodle_icon"/>-->
             <TextView
-                android:layout_marginLeft="10px"
+                android:layout_marginLeft="16px"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="留言"
-                android:textSize="36px"
+                android:textSize="26px"
                 android:textColor="@android:color/white"/>
         </LinearLayout>
 
         <ImageView
             android:id="@+id/new_doodle_btn"
-            android:layout_marginRight="35px"
+            android:layout_marginRight="20px"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_width="46px"
-            android:layout_height="46px"
+            android:layout_width="48px"
+            android:layout_height="48px"
+            android:scaleType="fitXY"
             android:src="@drawable/add_btn_normal"/>
 
     </RelativeLayout>
@@ -49,15 +50,13 @@
         android:gravity="center"
         android:textSize="36px"
         android:textColor="#D9D9D9"
-        android:text="亲，随手画画吧"
-        android:layout_marginBottom="8px"/>
+        android:text="亲，随手画画吧"/>
 
     <ImageView
         android:visibility="gone"
         android:id="@+id/doodle_desktop_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8px"
         android:scaleType="fitXY"/>
 
 </LinearLayout>

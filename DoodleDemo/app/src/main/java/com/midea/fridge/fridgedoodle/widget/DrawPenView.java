@@ -59,7 +59,6 @@ public class DrawPenView extends View {
         mContext = context;
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
         mDrawHelper = DrawHelper.getInstance();
-        mDrawHelper.reset();
         initPaint();
     }
 
@@ -98,6 +97,7 @@ public class DrawPenView extends View {
      * 根据已保存的步骤重绘一遍路径
      */
     public void reDraw() {
+        Log.d(TAG, "reDraw");
         int width = mCanvas.getWidth();
         int height = mCanvas.getHeight();
         mBottomBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -119,8 +119,10 @@ public class DrawPenView extends View {
         Log.d(TAG, "onSizeChanged, w:" + w + " h:" + h + " oldw:" + oldw + " oldh:" + oldh);
         if(w > 0&& h > 0){
             Log.d("Doodle", "onSizeChanged, w:" + w + ", h:" + h);
-            mBottomBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-            mCanvas = new Canvas(mBottomBitmap);
+            if(null == mBottomBitmap) {
+                mBottomBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                mCanvas = new Canvas(mBottomBitmap);
+            }
         }
     }
 
@@ -137,6 +139,9 @@ public class DrawPenView extends View {
     private DrawStep mDrawStep;// 涂鸦步骤
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(mDrawHelper.isTextSelect()) {
+            return super.onTouchEvent(event);
+        }
         float x = event.getX();
         float y = event.getY();
         switch (event.getAction()) {

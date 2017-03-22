@@ -13,6 +13,7 @@ import com.midea.fridge.fridgedoodle.bean.DoodleInfo;
 import com.midea.fridge.fridgedoodle.bean.DrawPenObj;
 import com.midea.fridge.fridgedoodle.bean.DrawPenStr;
 import com.midea.fridge.fridgedoodle.bean.DrawStep;
+import com.midea.fridge.fridgedoodle.bean.DrawStepToSave;
 import com.midea.fridge.fridgedoodle.bean.Point;
 
 import java.io.File;
@@ -49,11 +50,16 @@ public class StoreUtil {
      * @param fileName
      */
     public static void saveDoodle(View drawView, String fileName) {
-        List<DrawStep> drawSteps = new ArrayList<>();
-        // 保存时无需保存DrawPenObj
+        Log.d(TAG, "fileName:" + fileName);
+        List<DrawStepToSave> drawSteps = new ArrayList<>();
+        // 保存时无需保存DrawPenObj和mDrawTextView
         for(DrawStep drawStep: DrawHelper.getInstance().getDrawStepSet().getSaveSteps()) {
-            DrawStep tempDrawStep = new DrawStep();
-            tempDrawStep.setDrawPenStr(drawStep.getDrawPenStr());
+            DrawStepToSave tempDrawStep = new DrawStepToSave();
+            if(drawStep.getType() == DrawHelper.DRAW_PEN) {
+                tempDrawStep.setDrawPenStr(drawStep.getDrawPenStr());
+            } else if(drawStep.getType() == DrawHelper.DRAW_TEXT) {
+                tempDrawStep.setDrawTextObj(drawStep.getDrawTextObj());
+            }
             tempDrawStep.setType(drawStep.getType());
             drawSteps.add(tempDrawStep);
         }
@@ -69,7 +75,7 @@ public class StoreUtil {
             folder.mkdirs();
         }
         final File[] files = folder.listFiles();
-        if (files.length > 0) {
+        if (null != files && files.length > 0) {
             for (File f : files) {
                 if(f.getName().endsWith(SUFFIX_IMAGE)) {
                     String name = f.getName().substring(0, f.getName().indexOf(SUFFIX_IMAGE));

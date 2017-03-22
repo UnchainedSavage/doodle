@@ -181,14 +181,32 @@
             android:layout_height="88px"
             android:scaleType="fitXY"/>
 
+        <ImageView
+            android:id="@+id/drawtext_btn"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="60px"
+            android:layout_width="90px"
+            android:layout_height="78px"
+            android:src="@drawable/doodle_text_none"/>
+
     </RelativeLayout>
 
-    <com.midea.fridge.fridgedoodle.widget.DrawPenView
-        android:id="@+id/draw_pen_view"
-        android:background="@android:color/white"
+    <FrameLayout
+        android:id="@+id/draw_view_wrapper"
         android:layout_above="@id/draw_navigation"
         android:layout_below="@id/draw_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+        <com.midea.fridge.fridgedoodle.widget.DrawPenView
+            android:id="@+id/draw_pen_view"
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
+        <com.midea.fridge.fridgedoodle.widget.DrawTextView
+            android:id="@+id/draw_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
 </RelativeLayout>

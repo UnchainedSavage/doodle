@@ -11,10 +11,12 @@ import com.google.gson.reflect.TypeToken;
 import com.midea.fridge.fridgedoodle.bean.DoodleInfo;
 import com.midea.fridge.fridgedoodle.bean.DrawPenObj;
 import com.midea.fridge.fridgedoodle.bean.DrawStep;
+import com.midea.fridge.fridgedoodle.bean.DrawStepToSave;
 import com.midea.fridge.fridgedoodle.desktopwidget.NoteWidgetUpdater;
 import com.midea.fridge.fridgedoodle.eventbus.OneStepFinishEvent;
 import com.midea.fridge.fridgedoodle.eventbus.SaveFinishEvent;
 import com.midea.fridge.fridgedoodle.widget.DrawPenView;
+import com.midea.fridge.fridgedoodle.widget.DrawTextView;
 import com.midea.fridge.fridgedoodle.widget.OnSingleClickListener;
 import com.midea.fridge.fridgedoodle.widget.TwoButtonDialogFragment;
 
@@ -22,6 +24,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,7 +40,10 @@ public class DrawActivity extends BaseActivity implements View.OnClickListener{
     private ImageView mDrawPenSmallImage, mDrawPenMidImage, mDrawPenLargeImage;
     private ImageView mDrawEraserSmallImage, mDrawEraserLargeImage;
     private ImageView mRedBtn,mYellowBtn,mPurpleBtn,mBlackBtn,mGreenBtn,mBlueBtn;
+    private ImageView mDrawTextBtn;
+    private View mDrawViewWrapper;
     private DrawPenView mDrawPenView;
+    private DrawTextView mDrawTextView;
     private TwoButtonDialogFragment mCancelDialog;
 
     private DrawHelper mDrawHelper;
@@ -51,6 +57,7 @@ public class DrawActivity extends BaseActivity implements View.OnClickListener{
         setContentView(R.layout.activity_draw);
 
         mDrawHelper = DrawHelper.getInstance();
+        mDrawHelper.reset();
         handleIntent();
         EventBus.getDefault().register(this);
         initView();
@@ -74,13 +81,21 @@ public class DrawActivity extends BaseActivity implements View.OnClickListener{
                 showCancelDialog();
                 break;
             case R.id.doodle_prev_btn:
-                mDrawHelper.undoDrawStep();
-                mDrawPenView.reDraw();
+                DrawStep lastDrawStep = mDrawHelper.undoDrawStep();
+                if(lastDrawStep.getType() == DrawHelper.DRAW_PEN) {
+                    mDrawPenView.reDraw();
+                } else if(lastDrawStep.getType() == DrawHelper.DRAW_TEXT) {
+                    mDrawTextView.undoDrawStep(lastDrawStep);
+                }
                 refreshView();
                 break;
             case R.id.doodle_next_btn:
-                mDrawHelper.redoDrawStep();
-                mDrawPenView.reDraw();
+                DrawStep nextDrawStep = mDrawHelper.redoDrawStep();
+                if(nextDrawStep.getType() == DrawHelper.DRAW_PEN) {
+                    mDrawPenView.reDraw();
+                } else if(nextDrawStep.getType() == DrawHelper.DRAW_TEXT) {
+                    mDrawTextView.redoDrawStep(nextDrawStep);
+                }
                 refreshView();
                 break;
             case R.id.drawpen_small_image:
@@ -126,6 +141,10 @@ public class DrawActivity extends BaseActivity implements View.OnClickListener{
             case R.id.color_yellow_btn:
                 selectColor(DrawHelper.PenColor.YELLOW);
                 break;
+            case R.id.drawtext_btn:
+                mDrawHelper.selectTextType();
+                refreshView();
+                break;
         }
     }
 
@@ -140,16 +159,8 @@ public class DrawActivity extends BaseActivity implements View.OnClickListener{
                         showToast(TEXT_EDIT_BEFORE_SAVE);
                         return;
                     } else {
-                        if(null != mDoodleInfo) {
-                            StoreUtil.saveDoodle(mDrawPenView, mDoodleInfo.getName());
-                        } else {
-                            StoreUtil.saveDoodle(mDrawPenView);
-                        }
-                        showToast("保存成功");
-                        EventBus.getDefault().post(new SaveFinishEvent());
-                        // 更新widget
-                        NoteWidgetUpdater.getInstance().updateWidget(DrawActivity.this);
-                        finish();
+                        showProgressDialog("正在保存", null);
+                        new SaveDoodleTask().execute(mDrawViewWrapper);
                     }
                     break;
             }
@@ -163,7 +174,9 @@ public class DrawActivity extends BaseActivity implements View.OnClickListener{
     private void initView() {
         findViewById(R.id.doodle_cancel_btn).setOnClickListener(this);
         findViewById(R.id.doodle_confirm_btn).setOnClickListener(onSingleClickListener);
+        mDrawViewWrapper = findViewById(R.id.draw_view_wrapper);
         mDrawPenView = (DrawPenView) findViewById(R.id.draw_pen_view);
+        mDrawTextView = (DrawTextView) findViewById(R.id.draw_text_view);
 
         mPrevBtn = findViewById(R.id.doodle_prev_btn);
         mPrevBtn.setOnClickListener(this);
@@ -195,6 +208,9 @@ public class DrawActivity extends BaseActivity implements View.OnClickListener{
         mGreenBtn.setOnClickListener(this);
         mBlueBtn = (ImageView) findViewById(R.id.color_blue_btn);
         mBlueBtn.setOnClickListener(this);
+
+        mDrawTextBtn = (ImageView) findViewById(R.id.drawtext_btn);
+        mDrawTextBtn.setOnClickListener(this);
     }
 
     private void refreshView() {
@@ -285,6 +301,11 @@ public class DrawActivity extends BaseActivity implements View.OnClickListener{
             mBlueBtn.setImageResource(R.drawable.color_blue_normal);
             mPurpleBtn.setImageResource(R.drawable.color_purple_selected);
         }
+        if(mDrawHelper.isTextSelect()) {
+            mDrawTextBtn.setImageResource(getDrawTextImageByColor());
+        } else {
+            mDrawTextBtn.setImageResource(R.drawable.doodle_text_none);
+        }
     }
 
     private void selectColor(DrawHelper.PenColor penColor) {
@@ -311,6 +332,24 @@ public class DrawActivity extends BaseActivity implements View.OnClickListener{
             return R.drawable.drawpen_red;
         }
         return R.drawable.drawpen_unselected;
+    }
+
+    private int getDrawTextImageByColor() {
+        DrawHelper.PenColor penColor = mDrawHelper.getPenColor();
+        if(penColor == DrawHelper.PenColor.BLACK) {
+            return R.drawable.doodle_text_black;
+        } else if(penColor == DrawHelper.PenColor.BLUE) {
+            return R.drawable.doodle_text_blue;
+        } else if(penColor == DrawHelper.PenColor.YELLOW) {
+            return R.drawable.doodle_text_yellow;
+        } else if(penColor == DrawHelper.PenColor.GREEN) {
+            return R.drawable.doodle_text_green;
+        } else if(penColor == DrawHelper.PenColor.PURPLE) {
+            return R.drawable.doodle_text_purple;
+        } else if(penColor == DrawHelper.PenColor.RED) {
+            return R.drawable.doodle_text_red;
+        }
+        return R.drawable.doodle_text_none;
     }
 
     private void showCancelDialog() {
@@ -351,20 +390,53 @@ public class DrawActivity extends BaseActivity implements View.OnClickListener{
         protected List<DrawStep> doInBackground(DoodleInfo... params) {
             DoodleInfo doodleInfo = params[0];
             String drawStepJson = StoreUtil.read(doodleInfo.getSavePath());
-            List<DrawStep> drawSteps = new Gson().fromJson(drawStepJson, new TypeToken<List<DrawStep>>() {}.getType());
-            for(DrawStep drawStep:drawSteps) {
-                DrawPenObj drawPenObj = StoreUtil.convertDrawPenObj(drawStep.getDrawPenStr());
-                drawStep.setDrawPenObj(drawPenObj);
+            Log.d(TAG, "drawStepJson:" + drawStepJson);
+            List<DrawStep> result = new ArrayList<>();
+            List<DrawStepToSave> drawSteps = new Gson().fromJson(drawStepJson, new TypeToken<List<DrawStepToSave>>() {}.getType());
+            for(DrawStepToSave drawStepToSave:drawSteps) {
+                DrawStep drawStep = new DrawStep();
+                drawStep.setType(drawStepToSave.getType());
+                drawStep.setDrawPenStr(drawStepToSave.getDrawPenStr());
+                drawStep.setDrawTextObj(drawStepToSave.getDrawTextObj());
+                if(drawStepToSave.getType() == DrawHelper.DRAW_PEN) {
+                    DrawPenObj drawPenObj = StoreUtil.convertDrawPenObj(drawStep.getDrawPenStr());
+                    drawStep.setDrawPenObj(drawPenObj);
+                }
+                result.add(drawStep);
             }
-            return drawSteps;
+            return result;
         }
 
         @Override
         protected void onPostExecute(List<DrawStep> result) {
             mDrawHelper.getDrawStepSet().setSaveSteps(result);
             mDrawPenView.reDraw();
+            mDrawTextView.reDraw();
             refreshView();
             dismissProgressDialog();
+        }
+    }
+
+    private class SaveDoodleTask extends AsyncTask<View, Void, Void> {
+        @Override
+        protected Void doInBackground(View... params) {
+            View view = params[0];
+            if(null != mDoodleInfo) {
+                StoreUtil.saveDoodle(view, mDoodleInfo.getName());
+            } else {
+                StoreUtil.saveDoodle(view);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            dismissProgressDialog();
+            showToast("保存成功");
+            EventBus.getDefault().post(new SaveFinishEvent());
+            // 更新widget
+            NoteWidgetUpdater.getInstance().updateWidget(DrawActivity.this);
+            finish();
         }
     }
 

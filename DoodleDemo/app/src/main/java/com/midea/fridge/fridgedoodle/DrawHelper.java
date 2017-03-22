@@ -21,6 +21,7 @@ public class DrawHelper {
     private PenColor mPenColor;// 当前选择的颜色
     private PenType mPenType;// 当前选择的笔类型
     private EraserType mEraserType;// 当前选择的橡皮擦类型
+    private boolean mTextType;// 文本工具是否选择
 
     public static synchronized DrawHelper getInstance() {
         if(null == instance) {
@@ -45,16 +46,18 @@ public class DrawHelper {
         mDrawStepSet.getSaveSteps().add(oneStep);
     }
 
-    public void undoDrawStep() {
+    public DrawStep undoDrawStep() {
         DrawStep lastDrawStep = mDrawStepSet.getSaveSteps().get(mDrawStepSet.getSaveSteps().size() - 1);
         mDrawStepSet.getDeleteSteps().add(lastDrawStep);
         mDrawStepSet.getSaveSteps().remove(lastDrawStep);
+        return lastDrawStep;
     }
 
-    public void redoDrawStep() {
+    public DrawStep redoDrawStep() {
         DrawStep nextDrawStep = mDrawStepSet.getDeleteSteps().get(mDrawStepSet.getDeleteSteps().size() - 1);
         mDrawStepSet.getSaveSteps().add(nextDrawStep);
         mDrawStepSet.getDeleteSteps().remove(nextDrawStep);
+        return nextDrawStep;
     }
 
     public DrawStepSet getDrawStepSet() {
@@ -71,6 +74,7 @@ public class DrawHelper {
 
     public void selectPenType(PenType penType) {
         mEraserType = null;
+        mTextType = false;
         mPenType = penType;
     }
 
@@ -80,11 +84,18 @@ public class DrawHelper {
 
     public void selectEraserType(EraserType eraserType) {
         mPenType = null;
+        mTextType = false;
         mEraserType = eraserType;
     }
 
     public EraserType getEraserType() {
         return mEraserType;
+    }
+
+    public void selectTextType() {
+        mPenType = null;
+        mEraserType = null;
+        mTextType = true;
     }
 
     public boolean isPenSelect() {
@@ -99,6 +110,10 @@ public class DrawHelper {
             return true;
         }
         return false;
+    }
+
+    public boolean isTextSelect() {
+        return mTextType;
     }
 
     public enum PenColor {
@@ -116,7 +131,7 @@ public class DrawHelper {
     }
 
     public enum PenType {
-        SMALL(2),MIDDLE(5),LARGE(8);
+        SMALL(5),MIDDLE(10),LARGE(18);
 
         private int width;
 
@@ -130,7 +145,7 @@ public class DrawHelper {
     }
 
     public enum EraserType {
-        SMALL(8),LARGE(12);
+        SMALL(20),LARGE(40);
 
         private int width;
 
